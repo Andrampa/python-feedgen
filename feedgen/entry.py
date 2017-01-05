@@ -15,7 +15,6 @@ import dateutil.tz
 from feedgen.util import ensure_format, formatRFC2822
 from feedgen.compat import string_types
 
-print "test"
 class FeedEntry(object):
     '''FeedEntry call representing an ATOM feeds entry node or an RSS feeds item
     node.
@@ -26,6 +25,7 @@ class FeedEntry(object):
         # required
         self.__atom_id = None
         self.__atom_title = None
+        self.__atom_eventType = None
         self.__atom_updated = datetime.now(dateutil.tz.tzutc())
 
         # recommended
@@ -45,6 +45,9 @@ class FeedEntry(object):
         self.__rss_author = None
         self.__rss_category = None
         self.__rss_comments = None
+        self.__rss_templateOpt = None
+        self.__rss_linkTable = None
+        self.__rss_linkDashboard = None
         self.__rss_description = None
         self.__rss_content = None
         self.__rss_enclosure = None
@@ -67,6 +70,8 @@ class FeedEntry(object):
         id.text = self.__atom_id
         title = etree.SubElement(entry, 'title')
         title.text = self.__atom_title
+        eventType = etree.SubElement(entry, 'eventType')
+        eventType.text = self.__atom_eventType
         updated = etree.SubElement(entry, 'updated')
         updated.text = self.__atom_updated.isoformat()
 
@@ -133,6 +138,8 @@ class FeedEntry(object):
                 link.attrib['hreflang'] = l['hreflang']
             if l.get('title'):
                 link.attrib['title'] = l['title']
+            if l.get('eventType'):
+                link.attrib['eventType'] = l['eventType']
             if l.get('length'):
                 link.attrib['length'] = l['length']
 
@@ -187,6 +194,9 @@ class FeedEntry(object):
         if self.__rss_title:
             title = etree.SubElement(entry, 'title')
             title.text = self.__rss_title
+        if self.__rss_eventType:
+            eventType = etree.SubElement(entry, 'eventType')
+            eventType.text = self.__rss_eventType
         if self.__rss_link:
             link = etree.SubElement(entry, 'link')
             link.text = self.__rss_link
@@ -219,6 +229,15 @@ class FeedEntry(object):
         if self.__rss_comments:
             comments = etree.SubElement(entry, 'comments')
             comments.text = self.__rss_comments
+        if self.__rss_templateOpt:
+            templateOpt = etree.SubElement(entry, 'templateOpt')
+            templateOpt.text = self.__rss_templateOpt
+        if self.__rss_linkTable:
+            linkTable = etree.SubElement(entry, 'linkTable')
+            linkTable.text = self.__rss_linkTable
+        if self.__rss_linkDashboard:
+            linkDashboard = etree.SubElement(entry, 'linkDashboard')
+            linkDashboard.text = self.__rss_linkDashboard
         if self.__rss_enclosure:
             enclosure = etree.SubElement(entry, 'enclosure')
             enclosure.attrib['url'] = self.__rss_enclosure['url']
@@ -247,6 +266,19 @@ class FeedEntry(object):
             self.__atom_title = title
             self.__rss_title = title
         return self.__atom_title
+
+    def eventType(self, eventType=None):
+        '''Get or set the eventType value of the entry. It should contain a human
+        readable eventType for the entry. eventType is mandatory for both ATOM and RSS
+        and should not be blank.
+
+        :param eventType: The new eventType of the entry.
+        :returns: The entriess eventType.
+        '''
+        if eventType is not None:
+            self.__atom_eventType = eventType
+            self.__rss_eventType = eventType
+        return self.__atom_eventType
 
     def id(self, id=None):
         '''Get or set the entry id which identifies the entry using a
@@ -412,7 +444,7 @@ class FeedEntry(object):
                 self.__atom_link = []
             self.__atom_link += ensure_format(
                 link,
-                set(['href', 'rel', 'type', 'hreflang', 'title', 'length']),
+                set(['href', 'rel', 'type', 'hreflang', 'title', 'eventType', 'length']),
                 set(['href']),
                 {'rel': ['alternate', 'enclosure', 'related', 'self', 'via']},
                 {'rel': 'alternate'})
@@ -588,6 +620,39 @@ class FeedEntry(object):
         if comments is not None:
             self.__rss_comments = comments
         return self.__rss_comments
+
+    def templateOpt(self, templateOpt=None):
+        '''Get or set the the value of templateOpt which is the url of the
+        templateOpt page for the item. This is a RSS only value.
+
+        :param templateOpt: URL to the templateOpt page.
+        :returns: URL to the templateOpt page.
+        '''
+        if templateOpt is not None:
+            self.__rss_templateOpt = templateOpt
+        return self.__rss_templateOpt
+
+    def linkTable(self, linkTable=None):
+        '''Get or set the the value of linkTable which is the url of the
+        linkTable page for the item. This is a RSS only value.
+
+        :param linkTable: URL to the linkTable page.
+        :returns: URL to the linkTable page.
+        '''
+        if linkTable is not None:
+            self.__rss_linkTable = linkTable
+        return self.__rss_linkTable
+
+    def linkDashboard(self, linkDashboard=None):
+        '''Get or set the the value of linkDashboard which is the url of the
+        linkDashboard page for the item. This is a RSS only value.
+
+        :param linkDashboard: URL to the linkDashboard page.
+        :returns: URL to the linkDashboard page.
+        '''
+        if linkDashboard is not None:
+            self.__rss_linkDashboard = linkDashboard
+        return self.__rss_linkDashboard
 
     def enclosure(self, url=None, length=None, type=None):
         '''Get or set the value of enclosure which describes a media object

@@ -15,7 +15,7 @@ import dateutil.tz
 from feedgen.util import ensure_format, formatRFC2822
 from feedgen.compat import string_types
 
-
+print "test"
 class FeedEntry(object):
     '''FeedEntry call representing an ATOM feeds entry node or an RSS feeds item
     node.

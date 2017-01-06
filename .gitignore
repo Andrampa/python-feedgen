@@ -2,6 +2,7 @@ venv
 *.pyc
 *.pyo
 *.swp
+.DS_Store
 
 feedgen/tests/tmp_Atomfeed.xml
 
@@ -10,3 +11,7 @@ feedgen/tests/tmp_Rssfeed.xml
 tmp_Atomfeed.xml
 
 tmp_Rssfeed.xml
+test.py
+rss.xml
+
+test

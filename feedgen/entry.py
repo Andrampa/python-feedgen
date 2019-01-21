@@ -48,6 +48,7 @@ class FeedEntry(object):
         self.__rss_templateOpt = None
         self.__rss_linkTable = None
         self.__rss_linkDashboard = None
+        self.__rss_eventISO3 = None
         self.__rss_description = None
         self.__rss_content = None
         self.__rss_enclosure = None
@@ -238,6 +239,9 @@ class FeedEntry(object):
         if self.__rss_linkDashboard:
             linkDashboard = etree.SubElement(entry, 'linkDashboard')
             linkDashboard.text = self.__rss_linkDashboard
+        if self.__rss_eventISO3:
+            eventISO3 = etree.SubElement(entry, 'eventISO3')
+            eventISO3.text = self.__rss_eventISO3
         if self.__rss_enclosure:
             enclosure = etree.SubElement(entry, 'enclosure')
             enclosure.attrib['url'] = self.__rss_enclosure['url']
@@ -653,6 +657,17 @@ class FeedEntry(object):
         if linkDashboard is not None:
             self.__rss_linkDashboard = linkDashboard
         return self.__rss_linkDashboard
+
+    def eventISO3(self, eventISO3=None):
+        '''Get or set the the value of eventISO3 which is the url of the
+        eventISO3 page for the item. This is a RSS only value.
+
+        :param eventISO3: URL to the eventISO3 page.
+        :returns: URL to the eventISO3 page.
+        '''
+        if eventISO3 is not None:
+            self.__rss_eventISO3 = eventISO3
+        return self.__rss_eventISO3
 
     def enclosure(self, url=None, length=None, type=None):
         '''Get or set the value of enclosure which describes a media object
